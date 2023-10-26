@@ -1,0 +1,429 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "parameters": [],
+        "responses": { "200": { "description": "" } }
+      }
+    },
+    "/supplier/auth": {
+      "post": {
+        "operationId": "SupplierController_auth",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AuthDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Supplier successfully authenticated!",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AuthResponseDto" }
+              }
+            }
+          },
+          "500": { "description": "Internal Server Error!" }
+        },
+        "tags": ["Supplier"]
+      }
+    },
+    "/supplier/individual/create": {
+      "post": {
+        "operationId": "SupplierController_createSupplierIndividual",
+        "summary": "Solicitar um novo fornecedor pessoa física",
+        "description": "Rota para solicitar um novo fornecedor pessoa física",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSupplierIndividualDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Fornecedor criado com sucesso!" },
+          "500": { "description": "Ocorreu um erro interno no servidor." }
+        },
+        "tags": ["Supplier"]
+      }
+    },
+    "/supplier/legal/create": {
+      "post": {
+        "operationId": "SupplierController_createSupplierLegal",
+        "summary": "Solicitar um novo fornecedor pessoa jurídica",
+        "description": "Rota para solicitar um novo fornecedor pessoa jurídica",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSupplierLegalDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Fornecedor criado com sucesso!" },
+          "500": { "description": "Ocorreu um erro interno no servidor." }
+        },
+        "tags": ["Supplier"]
+      }
+    }
+  },
+  "info": {
+    "title": "Documentação API MMDG",
+    "description": "Documentação que descreve os endpoints da API da MMDG, é necessário mandar o cabeçalho \"Accept-Language\" como \"PT_BR\" ou \"EN_US\" ou \"ES_ES\" para cada requisição.",
+    "version": "0.1",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": { "scheme": "bearer", "bearerFormat": "JWT", "type": "http" }
+    },
+    "schemas": {
+      "AuthDto": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "description": "Email cadastrado" },
+          "password": { "type": "string", "description": "Senha cadastrada" }
+        },
+        "required": ["email", "password"]
+      },
+      "AuthResponseDto": {
+        "type": "object",
+        "properties": {
+          "token": { "type": "string", "description": "Token de autenticação" },
+          "refreshToken": {
+            "type": "string",
+            "description": "Token de reautenticação"
+          }
+        },
+        "required": ["token", "refreshToken"]
+      },
+      "SupplierIndividualDto": {
+        "type": "object",
+        "properties": {
+          "birth_date": {
+            "type": "number",
+            "description": "Data de nascimento do fornecedor",
+            "example": "25/10/2023"
+          },
+          "cpf": {
+            "type": "string",
+            "description": "CPF do fornecedor",
+            "example": "23273179082"
+          },
+          "nit": {
+            "type": "string",
+            "description": "NIT do fornecedor",
+            "example": "16065203794"
+          },
+          "rut": {
+            "type": "string",
+            "description": "RUT do fornecedor",
+            "example": "52774055"
+          }
+        },
+        "required": ["birth_date"]
+      },
+      "SupplierAddressDto": {
+        "type": "object",
+        "properties": {
+          "street": {
+            "type": "string",
+            "description": "Rua do fornecedor",
+            "example": "teste"
+          },
+          "number": {
+            "type": "string",
+            "description": "Número do fornecedor",
+            "example": "12"
+          },
+          "complement": {
+            "type": "string",
+            "description": "Complemento do fornecedor",
+            "example": ""
+          },
+          "zipcode": {
+            "type": "string",
+            "description": "CEP do fornecedor",
+            "example": "12345678"
+          },
+          "neighbourhood": {
+            "type": "string",
+            "description": "Bairro do fornecedor",
+            "example": "teste"
+          },
+          "city": {
+            "type": "string",
+            "description": "Cidade do fornecedor",
+            "example": "teste"
+          },
+          "state": {
+            "type": "string",
+            "description": "Estado do fornecedor",
+            "example": "TE"
+          },
+          "country": {
+            "type": "string",
+            "description": "País do fornecedor",
+            "example": ""
+          },
+          "post_office_box": {
+            "type": "string",
+            "description": "Caixa postal do fornecedor",
+            "example": ""
+          }
+        },
+        "required": [
+          "street",
+          "number",
+          "zipcode",
+          "neighbourhood",
+          "city",
+          "state"
+        ]
+      },
+      "SupplierBankDto": {
+        "type": "object",
+        "properties": {
+          "account_number": {
+            "type": "string",
+            "description": "Número da conta do fornecedor com dígito",
+            "example": "35424343-2"
+          },
+          "bank": {
+            "type": "string",
+            "description": "Banco do fornecedor",
+            "example": "Santander"
+          },
+          "responsible_finance_email": {
+            "type": "string",
+            "description": "Email do responsável financeiro da conta",
+            "example": ""
+          },
+          "agency": {
+            "type": "string",
+            "description": "Agência do banco",
+            "example": "4277"
+          },
+          "document": {
+            "type": "string",
+            "description": "Documento do fornecedor",
+            "example": ""
+          }
+        },
+        "required": ["account_number", "bank", "agency"]
+      },
+      "CreateSupplierIndividualDto": {
+        "type": "object",
+        "properties": {
+          "conduct_code_file": {
+            "type": "string",
+            "format": "binary",
+            "description": "Arquivo do código de conduta",
+            "example": ""
+          },
+          "requester_unit": {
+            "type": "string",
+            "description": "Unidade de Origem",
+            "example": "Barretos"
+          },
+          "legal_nature": {
+            "type": "string",
+            "enum": ["F", "J"],
+            "description": "Natureza jurídica",
+            "example": "F"
+          },
+          "full_name": {
+            "type": "string",
+            "description": "Razão social",
+            "example": "Teste Ltda"
+          },
+          "nationality": {
+            "type": "string",
+            "description": "Nacionalidade",
+            "example": "Brasil"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Telefone",
+            "example": "1112345678"
+          },
+          "priority": {
+            "type": "string",
+            "description": "Prioridade",
+            "example": "Média"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email",
+            "example": "teste@teste.com"
+          },
+          "contact_name": {
+            "type": "string",
+            "description": "Nome do contato",
+            "example": "Teste"
+          },
+          "individualData": {
+            "description": "Dados de pessoa física",
+            "allOf": [{ "$ref": "#/components/schemas/SupplierIndividualDto" }]
+          },
+          "address": {
+            "description": "Dados do endereço",
+            "allOf": [{ "$ref": "#/components/schemas/SupplierAddressDto" }]
+          },
+          "bankData": {
+            "description": "Dados bancários",
+            "allOf": [{ "$ref": "#/components/schemas/SupplierBankDto" }]
+          },
+          "files": {
+            "type": "string",
+            "format": "binary",
+            "description": "Anexos",
+            "example": ""
+          }
+        },
+        "required": [
+          "conduct_code_file",
+          "requester_unit",
+          "legal_nature",
+          "full_name",
+          "nationality",
+          "phone",
+          "priority",
+          "email",
+          "contact_name",
+          "individualData",
+          "address",
+          "bankData",
+          "files"
+        ]
+      },
+      "SupplierLegalDto": {
+        "type": "object",
+        "properties": {
+          "state_registration": {
+            "type": "string",
+            "description": "Inscrição estadual do fornecedor",
+            "example": "039290950529"
+          },
+          "cnpj": {
+            "type": "string",
+            "description": "CNPJ do fornecedor",
+            "example": "10666329000140"
+          },
+          "nit": {
+            "type": "string",
+            "description": "NIT do fornecedor",
+            "example": "16065203794"
+          },
+          "rut": {
+            "type": "string",
+            "description": "RUT do fornecedor",
+            "example": "52774055"
+          }
+        },
+        "required": ["state_registration"]
+      },
+      "CreateSupplierLegalDto": {
+        "type": "object",
+        "properties": {
+          "conduct_code_file": {
+            "type": "string",
+            "format": "binary",
+            "description": "Arquivo do código de conduta",
+            "example": ""
+          },
+          "requester_unit": {
+            "type": "string",
+            "description": "Unidade de Origem",
+            "example": "Barretos"
+          },
+          "legal_nature": {
+            "type": "string",
+            "enum": ["F", "J"],
+            "description": "Natureza jurídica",
+            "example": "F"
+          },
+          "full_name": {
+            "type": "string",
+            "description": "Razão social",
+            "example": "Teste Ltda"
+          },
+          "nationality": {
+            "type": "string",
+            "description": "Nacionalidade",
+            "example": "Brasil"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Telefone",
+            "example": "1112345678"
+          },
+          "priority": {
+            "type": "string",
+            "description": "Prioridade",
+            "example": "Média"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email",
+            "example": "teste@teste.com"
+          },
+          "contact_name": {
+            "type": "string",
+            "description": "Nome do contato",
+            "example": "Teste"
+          },
+          "legalData": {
+            "description": "Dados de pessoa jurídica",
+            "allOf": [{ "$ref": "#/components/schemas/SupplierLegalDto" }]
+          },
+          "address": {
+            "description": "Dados do endereço",
+            "allOf": [{ "$ref": "#/components/schemas/SupplierAddressDto" }]
+          },
+          "bankData": {
+            "description": "Dados bancários",
+            "allOf": [{ "$ref": "#/components/schemas/SupplierBankDto" }]
+          },
+          "files": {
+            "type": "string",
+            "format": "binary",
+            "description": "Anexos",
+            "example": ""
+          }
+        },
+        "required": [
+          "conduct_code_file",
+          "requester_unit",
+          "legal_nature",
+          "full_name",
+          "nationality",
+          "phone",
+          "priority",
+          "email",
+          "contact_name",
+          "legalData",
+          "address",
+          "bankData",
+          "files"
+        ]
+      }
+    }
+  }
+}
